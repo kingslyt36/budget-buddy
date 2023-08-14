@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+model User {
+  id           String        @id @default(uuid()) @db.Uuid
+  username     String        @unique
+  email        String        @unique
+  password     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  portfolios   Portfolio[]
+}
+
+model Transaction {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String
+  type            String
+  symbol          String
+  quantity        Float
+  pricePerUnit    Float
+  totalAmount     Float
+  transactionDate DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model Portfolio {
+  id          String          @id @default(uuid()) @db.Uuid
+  userId      String
+  name        String
+  description String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id])
+  items       PortfolioItem[]
+}
+
+model PortfolioItem {
+  id           String    @id @default(uuid()) @db.Uuid
+  portfolioId  String
+  symbol       String
+  quantity     Float
+  averagePrice Float
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  portfolio    Portfolio @relation(fields: [portfolioId], references: [id])
+}

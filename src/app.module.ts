@@ -9,8 +9,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { DatabaseModule } from './modules/database/database.module';
-import { PortfolioModule } from './portfolio/portfolio.module';
-import { TransactionModule } from './transaction/transaction.module';
+import { PortfolioModule } from './modules/portfolio/portfolio.module';
+import { TransactionModule } from './modules/transaction/transaction.module';
 @Module({
     imports: [
         UserModule,

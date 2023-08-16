@@ -1,0 +1,24 @@
+type Portfolio {
+    # Example field (placeholder)
+    exampleField: Int
+}
+
+input CreatePortfolioInput {
+    # Example field (placeholder)
+    exampleField: Int
+}
+
+input UpdatePortfolioInput {
+    id: Int!
+}
+
+type Query {
+    portfolio: [Portfolio]!
+    portfolio(id: Int!): Portfolio
+}
+
+type Mutation {
+    createPortfolio(createPortfolioInput: CreatePortfolioInput!): Portfolio!
+    updatePortfolio(updatePortfolioInput: UpdatePortfolioInput!): Portfolio!
+    removePortfolio(id: Int!): Portfolio
+}

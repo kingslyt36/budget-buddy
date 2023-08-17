@@ -11,6 +11,8 @@ import { UserModule } from './modules/user/user.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { PortfolioModule } from './modules/portfolio/portfolio.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
+import { PortfolioItemModule } from './modules/portfolio-item/portfolio-item.module';
+import { AuthModule } from './modules/auth/auth.module';
 @Module({
     imports: [
         UserModule,
@@ -28,6 +30,8 @@ import { TransactionModule } from './modules/transaction/transaction.module';
         DatabaseModule,
         PortfolioModule,
         TransactionModule,
+        PortfolioItemModule,
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [AppService],

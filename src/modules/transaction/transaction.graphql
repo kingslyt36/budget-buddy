@@ -1,24 +1,46 @@
+scalar DateTime
+
 type Transaction {
-    # Example field (placeholder)
-    exampleField: Int
+    id: ID!
+    type: String!
+    symbol: String!
+    quantity: Float!
+    pricePerUnit: Float!
+    totalAmount: Float!
+    transactionDate: DateTime!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    user: User!
 }
 
 input CreateTransactionInput {
-    # Example field (placeholder)
-    exampleField: Int
+    type: String!
+    symbol: String!
+    quantity: Float!
+    pricePerUnit: Float!
+    totalAmount: Float!
+    transactionDate: DateTime!
+    userId: ID!
 }
 
 input UpdateTransactionInput {
-    id: Int!
+    id: ID!
+    type: String
+    symbol: String
+    quantity: Float
+    pricePerUnit: Float
+    totalAmount: Float
+    transactionDate: DateTime
+    userId: ID
 }
 
 type Query {
-    transaction: [Transaction]!
-    transaction(id: Int!): Transaction
+    getTransactions: [Transaction!]!
+    getTransaction(id: ID!): Transaction
 }
 
 type Mutation {
     createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
     updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
-    removeTransaction(id: Int!): Transaction
+    removeTransaction(id: ID!): Transaction
 }

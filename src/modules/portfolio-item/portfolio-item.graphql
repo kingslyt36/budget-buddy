@@ -1,0 +1,37 @@
+scalar DateTime
+
+type PortfolioItem {
+    id: ID!
+    symbol: String!
+    quantity: Float!
+    averagePrice: Float!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    portfolio: Portfolio!
+}
+
+input CreatePortfolioItemInput {
+    symbol: String!
+    quantity: Float!
+    averagePrice: Float!
+    portfolioId: ID!
+}
+
+input UpdatePortfolioItemInput {
+    id: ID!
+    symbol: String
+    quantity: Float
+    averagePrice: Float
+    portfolioId: ID
+}
+
+type Query {
+    getPortfolioItems: [PortfolioItem!]!
+    getPortfolioItem(id: ID!): PortfolioItem
+}
+
+type Mutation {
+    createPortfolioItem(createPortfolioItemInput: CreatePortfolioItemInput!): PortfolioItem!
+    updatePortfolioItem(updatePortfolioItemInput: UpdatePortfolioItemInput!): PortfolioItem!
+    removePortfolioItem(id: ID!): PortfolioItem
+}

@@ -12,12 +12,12 @@ export class PortfolioResolver {
         return this.portfolioService.create(createPortfolioInput);
     }
 
-    @Query('portfolio')
+    @Query('getPortfolios')
     findAll() {
         return this.portfolioService.findAll();
     }
 
-    @Query('portfolio')
+    @Query('getPortfolio')
     findOne(@Args('id') id: number) {
         return this.portfolioService.findOne(id);
     }

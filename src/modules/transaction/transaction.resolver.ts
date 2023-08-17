@@ -12,12 +12,12 @@ export class TransactionResolver {
         return this.transactionService.create(createTransactionInput);
     }
 
-    @Query('transaction')
+    @Query('getTransactions')
     findAll() {
         return this.transactionService.findAll();
     }
 
-    @Query('transaction')
+    @Query('getTransaction')
     findOne(@Args('id') id: number) {
         return this.transactionService.findOne(id);
     }

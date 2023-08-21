@@ -1,8 +1,8 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { User } from '@prisma/client';
 
 import { AuthService } from './auth.service';
 import { LoginInput, RegisterInput } from 'src/types/graphql';
+import { AuthPayloadDto } from './dto';
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -14,7 +14,7 @@ export class AuthResolver {
     }
 
     @Mutation('register')
-    async register(@Args('registerInput') registerInput: RegisterInput): Promise<User> {
-        return this.authService.register(registerInput.email, registerInput.username, registerInput.password);
+    async register(@Args('registerInput') registerInput: RegisterInput): Promise<AuthPayloadDto> {
+        return this.authService.register(registerInput);
     }
 }

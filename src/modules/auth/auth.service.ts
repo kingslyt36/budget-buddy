@@ -1,46 +1,50 @@
-import { ForbiddenException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { DatabaseService } from '../database/database.service';
-import { comparePasswords, hashPassword } from './helpers';
+import { UserService } from '../user/user.service';
+import { comparePasswords } from '../../util/helpers';
+import { RegisterInput } from '../../types/graphql';
+import { AuthPayloadDto } from './dto';
 
-// TODO: Split the createUser and FindUserByName into UserService
+// TODO: Implement JWT Token
 @Injectable()
 export class AuthService {
-    constructor(private db: DatabaseService) {}
+    constructor(
+        private db: DatabaseService,
+        private readonly userService: UserService,
+    ) {}
 
-    async login(email: string, password: string): Promise<User> {
-        const user = await this.db.user.findUnique({ where: { email } });
+    // TODO: Figure a way for GraphQL didn't have an option for query password out of user
+    async login(email: string, password: string) {
+        const user = await this.userService.findOneByEmail(email);
+
         if (!user || !(await comparePasswords(password, user.password))) {
             throw new UnauthorizedException('Invalid email or password');
         }
-        return user;
+        const token = 'This will be generated later on';
+        return {
+            token,
+            user,
+        };
     }
 
-    // TODO: Use DTO instead of GraphQL types
-    async register(email: string, username: string, password: string): Promise<User> {
+    async register(registerInput: RegisterInput): Promise<AuthPayloadDto> {
         try {
-            // Create hashed password for extra security
-            const hashedPassword = await hashPassword(password);
             // Save the new user to database
-            const user = await this.db.user.create({
-                data: {
-                    username,
-                    email,
-                    password: hashedPassword,
-                },
+            const user = await this.userService.create({
+                email: registerInput.email,
+                username: registerInput.username,
+                password: registerInput.password,
             });
 
             // return the new user info
             // TODO: Need to be return the JWT token later when Passport-JWT strategy is implemented
-            return user;
+            const token = 'This will be generated later on';
+            return {
+                token,
+                user,
+            };
         } catch (error) {
-            if (error instanceof PrismaClientKnownRequestError) {
-                if (error.code === 'P2002') {
-                    throw new ForbiddenException('Credentials taken');
-                }
-            }
             throw new HttpException('Registration failed', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

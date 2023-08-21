@@ -8,7 +8,7 @@ export class UserResolver {
     constructor(private readonly userService: UserService) {}
 
     @Mutation('createUser')
-    create(@Args('createUserInput') createUserInput: CreateUserInput) {
+    async create(@Args('createUserInput') createUserInput: CreateUserInput) {
         return this.userService.create(createUserInput);
     }
 
@@ -17,9 +17,14 @@ export class UserResolver {
         return this.userService.findAll();
     }
 
-    @Query('getUser')
-    findOne(@Args('id') id: number) {
-        return this.userService.findOne(id);
+    @Query('getUserById')
+    findOneById(@Args('id') id: number) {
+        return this.userService.findOneById(id);
+    }
+
+    @Query('getUserByEmail')
+    findOneByEmail(@Args('email') email: string) {
+        return this.userService.findOneByEmail(email);
     }
 
     @Mutation('updateUser')

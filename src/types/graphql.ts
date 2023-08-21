@@ -141,7 +141,9 @@ export abstract class IQuery {
 
     abstract getUsers(): User[] | Promise<User[]>;
 
-    abstract getUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+    abstract getUserById(id: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract getUserByEmail(email: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class Portfolio {
@@ -174,8 +176,8 @@ export class User {
     password: string;
     createdAt: DateTime;
     updatedAt: DateTime;
-    transactions: Transaction[];
-    portfolios: Portfolio[];
+    transactions?: Nullable<Transaction[]>;
+    portfolios?: Nullable<Portfolio[]>;
 }
 
 export type DateTime = any;

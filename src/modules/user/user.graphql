@@ -7,8 +7,8 @@ type User {
     password: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    transactions: [Transaction!]!
-    portfolios: [Portfolio!]!
+    transactions: [Transaction!]
+    portfolios: [Portfolio!]
 }
 
 input CreateUserInput {
@@ -26,7 +26,8 @@ input UpdateUserInput {
 
 type Query {
     getUsers: [User!]!
-    getUser(id: ID!): User
+    getUserById(id: ID!): User
+    getUserByEmail(email: String!): User
 }
 
 type Mutation {

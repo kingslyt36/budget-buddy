@@ -1,12 +1,11 @@
-import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { CreateUserInput, UpdateUserInput } from './dto';
 import { User } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { hashPassword } from '../../util/helpers';
 
-// TODO: Testing for mor error type
+// TODO: Testing for more error type
 @Injectable()
 export class UserService {
     constructor(private db: DatabaseService) {}
@@ -26,11 +25,7 @@ export class UserService {
 
             return user;
         } catch (error) {
-            if (error instanceof PrismaClientKnownRequestError) {
-                if (error.code === 'P2002') {
-                    throw new ForbiddenException('Credentials taken');
-                }
-            }
+            throw error;
         }
     }
 

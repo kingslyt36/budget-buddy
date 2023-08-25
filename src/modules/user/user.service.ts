@@ -1,19 +1,20 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 import { CreateUserInput, UpdateUserInput } from './dto';
-import { User } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
-import { hashPassword } from '../../util/helpers';
+import { hashData } from '../../utils/helpers';
+import { UserPayloadDto } from '../auth/dto';
 
 // TODO: Testing for more error type
 @Injectable()
 export class UserService {
     constructor(private db: DatabaseService) {}
 
-    async create(createUserInput: CreateUserInput): Promise<User> {
+    async create(createUserInput: CreateUserInput): Promise<UserPayloadDto> {
         try {
             // Create hashed password for extra security
-            const hashedPassword = await hashPassword(createUserInput.password);
+            const hashedPassword = await hashData(createUserInput.password);
 
             const user = await this.db.user.create({
                 data: {
@@ -23,6 +24,7 @@ export class UserService {
                 },
             });
 
+            delete user.password;
             return user;
         } catch (error) {
             throw error;
@@ -33,7 +35,7 @@ export class UserService {
         return `This action returns all user`;
     }
 
-    async findOneByEmail(email: string) {
+    async findOneByEmail(email: string): Promise<User> {
         try {
             const user = await this.db.user.findUnique({
                 where: {
@@ -46,7 +48,9 @@ export class UserService {
             }
 
             return user;
-        } catch (error) {}
+        } catch (error) {
+            throw error;
+        }
     }
 
     findOneById(id: number) {}

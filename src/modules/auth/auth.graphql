@@ -1,20 +1,50 @@
+# Data payload
 type AuthPayload {
-    token: String!
-    user: User!
+    tokens: TokensPayload!
+    user: UserPayload!
+}
+type UserPayload {
+    id: ID!
+    username: String!
+    email: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+type TokensPayload {
+    accessToken: String!
+    refreshToken: String!
 }
 
+# Register related
 input RegisterInput {
     username: String!
     email: String!
     password: String!
 }
+type RegisterResponse {
+    status: Int!
+    data: AuthPayload!
+}
 
+# Login related
 input LoginInput {
     email: String!
     password: String!
 }
+type LoginResponse {
+    status: Int!
+    data: AuthPayload!
+}
+
+# Logout related
+type LogoutResponse {
+    status: Int!
+    message: String!
+}
 
 type Mutation {
-    login(loginInput: LoginInput!): AuthPayload!
-    register(registerInput: RegisterInput!): AuthPayload!
+    register(registerInput: RegisterInput!): RegisterResponse!
+    login(loginInput: LoginInput!): LoginResponse!
+    logout: LogoutResponse!
+    refreshToken: TokensPayload!
 }

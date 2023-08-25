@@ -82,14 +82,46 @@ export class UpdateUserInput {
 }
 
 export class AuthPayload {
-    token: string;
-    user: User;
+    tokens: TokensPayload;
+    user: UserPayload;
+}
+
+export class UserPayload {
+    id: string;
+    username: string;
+    email: string;
+    createdAt: DateTime;
+    updatedAt: DateTime;
+}
+
+export class TokensPayload {
+    accessToken: string;
+    refreshToken: string;
+}
+
+export class RegisterResponse {
+    status: number;
+    data: AuthPayload;
+}
+
+export class LoginResponse {
+    status: number;
+    data: AuthPayload;
+}
+
+export class LogoutResponse {
+    status: number;
+    message: string;
 }
 
 export abstract class IMutation {
-    abstract login(loginInput: LoginInput): AuthPayload | Promise<AuthPayload>;
+    abstract register(registerInput: RegisterInput): RegisterResponse | Promise<RegisterResponse>;
 
-    abstract register(registerInput: RegisterInput): AuthPayload | Promise<AuthPayload>;
+    abstract login(loginInput: LoginInput): LoginResponse | Promise<LoginResponse>;
+
+    abstract logout(): LogoutResponse | Promise<LogoutResponse>;
+
+    abstract refreshToken(): TokensPayload | Promise<TokensPayload>;
 
     abstract createPortfolioItem(createPortfolioItemInput: CreatePortfolioItemInput): PortfolioItem | Promise<PortfolioItem>;
 

@@ -1,4 +1,8 @@
-export * from './auth-payload.dto';
-export * from './register.input.dto';
-export * from './login.input.dto';
-export * from './user-data.dto';
+// Data payload
+export * from './payload';
+// Register related
+export * from './register';
+// Login related
+export * from './login';
+// Logout related
+export * from './logout';

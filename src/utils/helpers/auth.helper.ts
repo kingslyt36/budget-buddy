@@ -4,6 +4,6 @@ export async function hashData(password: string): Promise<string> {
     return argon2.hash(password);
 }
 
-export async function comparePasswords(password: string, hash: string): Promise<boolean> {
+export async function compareHashed(password: string, hash: string): Promise<boolean> {
     return argon2.verify(hash, password);
 }

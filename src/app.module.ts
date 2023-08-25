@@ -22,6 +22,7 @@ import { AuthModule } from './modules/auth/auth.module';
             playground: false,
             plugins: [ApolloServerPluginLandingPageLocalDefault()],
             typePaths: ['./**/*.graphql'],
+            context: ({ req }) => ({ req }),
             definitions: {
                 path: join(process.cwd(), 'src/types/graphql.ts'),
                 outputAs: 'class',

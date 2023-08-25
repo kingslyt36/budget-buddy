@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsDate } from 'class-validator';
 
-export class UserDto {
+export class UserPayloadDto {
     @IsNotEmpty()
     @IsString()
     id: string;

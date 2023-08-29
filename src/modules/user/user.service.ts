@@ -1,17 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { User } from '@prisma/client';
 
-import { CreateUserInput, UpdateUserInput } from './dto';
+import { ChangePasswordInputDto, CreateUserInputDto, UserResponseDto } from './dto';
 import { DatabaseService } from '../database/database.service';
-import { hashData } from '../../utils/helpers';
-import { UserPayloadDto } from '../auth/dto';
+import { compareHashed, hashData } from '../../utils/helpers';
 
-// TODO: Testing for more error type
 @Injectable()
 export class UserService {
     constructor(private db: DatabaseService) {}
 
-    async create(createUserInput: CreateUserInput): Promise<UserPayloadDto> {
+    async create(createUserInput: CreateUserInputDto): Promise<User> {
         try {
             // Create hashed password for extra security
             const hashedPassword = await hashData(createUserInput.password);
@@ -24,15 +22,10 @@ export class UserService {
                 },
             });
 
-            delete user.password;
             return user;
         } catch (error) {
             throw error;
         }
-    }
-
-    findAll() {
-        return `This action returns all user`;
     }
 
     async findOneByEmail(email: string): Promise<User> {
@@ -42,7 +35,6 @@ export class UserService {
                     email,
                 },
             });
-
             if (!user) {
                 throw new UnauthorizedException('Invalid email or password');
             }
@@ -53,13 +45,39 @@ export class UserService {
         }
     }
 
-    findOneById(id: number) {}
+    async changePassword(userId, userPasswordData: ChangePasswordInputDto): Promise<UserResponseDto> {
+        try {
+            const user = await this.db.user.findUnique({
+                where: {
+                    id: userId,
+                },
+            });
+            if (!user) {
+                throw new BadRequestException('No user were found');
+            }
 
-    update(id: number, updateUserInput: UpdateUserInput) {
-        return `This action updates a #${id} user`;
-    }
+            const isPasswordCorrect = await compareHashed(userPasswordData.oldPassword, user.password);
+            if (!isPasswordCorrect) {
+                throw new BadRequestException('Invalid old password');
+            }
 
-    remove(id: number) {
-        return `This action removes a #${id} user`;
+            const newHashedPassword = await hashData(userPasswordData.oldPassword);
+            const userWithNewPassword = await this.db.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    password: newHashedPassword,
+                },
+            });
+
+            const response: UserResponseDto = {
+                status: HttpStatus.ACCEPTED,
+                data: userWithNewPassword,
+            };
+            return response;
+        } catch (error) {
+            throw error;
+        }
     }
 }

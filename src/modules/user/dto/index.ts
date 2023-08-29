@@ -1,2 +1,3 @@
-export * from './create-user.input';
-export * from './update-user.input';
+export * from './user-response.output.dto';
+export * from './user-create.input.dto';
+export * from './password-change.input.dto';

@@ -44,6 +44,7 @@ export class AuthService {
                 username: registerInput.username,
                 password: registerInput.password,
             });
+            delete user.password;
 
             // Generate access token and refresh token for user
             const tokens = await this.generateToken(user);

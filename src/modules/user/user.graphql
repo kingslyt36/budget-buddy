@@ -10,28 +10,26 @@ type User {
     transactions: [Transaction!]
     portfolios: [Portfolio!]
 }
+type Response {
+    status: Int!
+    data: User!
+}
 
 input CreateUserInput {
     username: String!
     email: String!
     password: String!
 }
-
-input UpdateUserInput {
-    id: ID!
-    username: String
-    email: String
-    password: String
+input ChangePasswordInput {
+    oldPassword: String!
+    newPassword: String!
 }
 
 type Query {
-    getUsers: [User!]!
-    getUserById(id: ID!): User
     getUserByEmail(email: String!): User
 }
 
 type Mutation {
     createUser(createUserInput: CreateUserInput!): User!
-    updateUser(updateUserInput: UpdateUserInput!): User!
-    removeUser(id: ID!): User
+    changePassword(changePasswordInput: ChangePasswordInput): Response!
 }

@@ -74,11 +74,9 @@ export class CreateUserInput {
     password: string;
 }
 
-export class UpdateUserInput {
-    id: string;
-    username?: Nullable<string>;
-    email?: Nullable<string>;
-    password?: Nullable<string>;
+export class ChangePasswordInput {
+    oldPassword: string;
+    newPassword: string;
 }
 
 export class AuthPayload {
@@ -143,9 +141,7 @@ export abstract class IMutation {
 
     abstract createUser(createUserInput: CreateUserInput): User | Promise<User>;
 
-    abstract updateUser(updateUserInput: UpdateUserInput): User | Promise<User>;
-
-    abstract removeUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+    abstract changePassword(changePasswordInput?: Nullable<ChangePasswordInput>): Response | Promise<Response>;
 }
 
 export class PortfolioItem {
@@ -170,10 +166,6 @@ export abstract class IQuery {
     abstract getTransactions(): Transaction[] | Promise<Transaction[]>;
 
     abstract getTransaction(id: string): Nullable<Transaction> | Promise<Nullable<Transaction>>;
-
-    abstract getUsers(): User[] | Promise<User[]>;
-
-    abstract getUserById(id: string): Nullable<User> | Promise<Nullable<User>>;
 
     abstract getUserByEmail(email: string): Nullable<User> | Promise<Nullable<User>>;
 }
@@ -210,6 +202,11 @@ export class User {
     updatedAt: DateTime;
     transactions?: Nullable<Transaction[]>;
     portfolios?: Nullable<Portfolio[]>;
+}
+
+export class Response {
+    status: number;
+    data: User;
 }
 
 export type DateTime = any;

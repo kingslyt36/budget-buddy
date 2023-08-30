@@ -80,4 +80,21 @@ export class UserService {
             throw error;
         }
     }
+
+    async initiateBalance(userId: string, newBalance: number) {
+        try {
+            const updatedUser = await this.db.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    balance: newBalance,
+                },
+            });
+
+            return updatedUser;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

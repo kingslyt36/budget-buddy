@@ -31,5 +31,6 @@ type Query {
 
 type Mutation {
     createUser(createUserInput: CreateUserInput!): User!
+    initiateBalance(amount: Float!): Response!
     changePassword(changePasswordInput: ChangePasswordInput): Response!
 }

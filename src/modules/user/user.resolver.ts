@@ -23,4 +23,10 @@ export class UserResolver {
     ) {
         return this.userService.changePassword(user.sub, changePasswordInput);
     }
+
+    @Mutation('initiateBalance')
+    @UseGuards(JwtAuthGuard)
+    async initiateBalance(@CurrentUser() user: any, @Args('amount') newBalance: number) {
+        return this.userService.initiateBalance(user.sub, newBalance);
+    }
 }
